@@ -3,6 +3,7 @@ import UserCard from './UserCard'
 import styled from 'styled-components'
 import { useUser } from './UserContext'
 import {Link} from 'react-router-dom'
+import UserDetail from './UserDetail'
 
 const Body = styled.div`
   background: linear-gradient(135deg, #9b78fe,#adb4ff, #e3a2ff);
@@ -51,7 +52,7 @@ const Register = styled.div`
 `
 
 const UserList = () => {
-  const users = useUser();
+  const {users, setUsers} = useUser();
   return (
     <Body>
       <Header>
@@ -63,7 +64,11 @@ const UserList = () => {
       </Header>
       <Wrapper>
         {users.map((user) => (
-          <UserCard key={user.index} user={user}/>
+          <Link key={user.index} to={`/user/${user.id}`} style={{ color: 'inherit', textDecoration: 'none' }} state={{user}}>
+              <UserCard
+                user={user}
+                />
+          </Link>
         ))}
       </Wrapper>
     </Body>

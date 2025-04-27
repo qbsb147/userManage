@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import { useUser } from './UserContext'
 
@@ -59,11 +59,8 @@ const Info = styled.div`
   height: 30px;
 `
 
-const UserCard = ({user}) => {
-
-  const handleImageError = (e) => {
-    e.target.src = '/src/images/default.png';
-  };
+const UserCard = ({ user }) => {
+  const [imgSrc, setImgSrc] = useState(user.image);
 
   return (
     <Card>
@@ -71,9 +68,9 @@ const UserCard = ({user}) => {
         {user.id}
       </Head>
       <Image 
-        src={user.image} 
+        src={imgSrc || '/src/images/default.png'} 
         alt={`${user.name}의 이미지`}
-        onError={handleImageError}/>
+        />
       <Name>
         {user.name}
       </Name>

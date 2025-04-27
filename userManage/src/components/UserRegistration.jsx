@@ -1,10 +1,11 @@
-import React, {useState, useRef} from 'react'
+import React, { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useUser } from './UserContext'
 import useInput from './customHook/useInput'
 const Body = styled.div`
   background :  linear-gradient(135deg, #EA5C54 0%, #bb6dec 100%);
-  width: 100vw;
+  min-width: 100vw;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -127,16 +128,19 @@ const Textarea = styled.textarea`
   &:focus{
     outline: none;
   }
-    &:hover{
+  &:hover{
     background: #424557;
   }
 `
 
 const Floot = styled.div`
-
+  display:flex;
+  justify-content:flex-start;
+  padding: 5px;
 `
 
 const UserRegistration = () => {
+  const navigate = useNavigate();
   const { users, setUsers } = useUser();
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
@@ -149,20 +153,23 @@ const UserRegistration = () => {
   const age = useInput('');
   const info = useInput('');
   const [passwordError, setPasswordError] = useState(false);
-  const newUser = {
-    index: Date.now(),
-    id: id.value,
-    name: name.value,
-    age: age.value,
-    phone: phone.value,
-    password: password.value,
-    address: address.value,
-    info: info.value,
-    image: preview,
-  }
-  
-  const handleSubmit = () => {
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newUser = {
+      index: Date.now(),
+      id: id.value,
+      name: name.value,
+      age: age.value,
+      phone: phone.value,
+      password: password.value,
+      address: address.value,
+      info: info.value,
+      image: preview,
+    }
+    
     setUsers([...users, newUser]);
+    navigate('/');
   }
 
   const handleClick = () => {
@@ -180,14 +187,17 @@ const UserRegistration = () => {
       setPreview(reader.result); 
     };
   };
-
+  
   const handleReset = () => {
-  };
-
-  const handlePasswordCheck = (e) => {
-    setPasswordError(passwordCheck.value === password.value);
+    name.onChange({ target: { value: '' } });
+    id.onChange({ target: { value: '' } });
+    password.onChange({ target: { value: '' } });
+    passwordCheck.onChange({ target: { value: '' } });
+    address.onChange({ target: { value: '' } });
+    age.onChange({ target: { value: '' } });
+    phone.onChange({ target: { value: '' } });
+    info.onChange({ target: { value: '' } });
   }
-
   return (
     <Body>
       <Wrapper>
@@ -238,7 +248,11 @@ const UserRegistration = () => {
               </Title>
               <Input 
                 type='password' 
-                {...passwordCheck} 
+                value={passwordCheck.value}
+                onChange={(e) => {
+                  passwordCheck.onChange(e);
+                  setPasswordError(e.target.value === password.value);
+                }}
                 required 
                 />
             </Line>
