@@ -205,6 +205,7 @@ const UserRegistration = () => {
           type="file"
           accept="image/*"
           ref={fileInputRef}
+          onChange={handleChange}
           />
         <Image 
           src={preview || "/src/images/default.png"} 
